@@ -10,9 +10,13 @@ const app = express()
 app.use(tickerRoute)
 
 // connect mongodb
-console.log(process.env.DATABASE)
-mongoose.connect(process.env.DATABASE)
-.then(console.log("database connected"))
+mongoose.connect(process.env.DBURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Connected to database!");
+  })
+  .catch((err) => {
+    console.log("Error connecting to database:", err);
+  });
 
 app.listen(port, ()=>{
     console.log(`server is running on ${port}`)
