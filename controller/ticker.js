@@ -2,7 +2,7 @@ const axios= require("axios")
 const TickerModel = require("../model/tickerSchema")
 
 
-exports.getTickers = async (req, res) => {
+exports.getTickersByapi = async (req, res) => {
     try {
         const response = await axios.get("https://api.wazirx.com/api/v2/tickers")
         const tickers = response.data
@@ -25,6 +25,33 @@ exports.getTickers = async (req, res) => {
         await TickerModel.insertMany(tickerData);
 
         res.status(200).json({message : "ticker addes successfull"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Unable to fetch top 10 tickers' });
+    }
+}
+
+exports.getTickers = async(req, res)=>{
+    try {
+        const response = await TickerModel.find({})
+
+        res.status(200).json({
+            message : "ticker fetched successfull",
+            result : response
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Unable to fetch top 10 tickers' });
+    }
+}
+exports.delteTickers = async(req, res)=>{
+    try {
+        const response = await TickerModel.deleteMany()
+
+        res.status(200).json({
+            message : "ticker deleted successfull",
+            result : response
+        })
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Unable to fetch top 10 tickers' });
